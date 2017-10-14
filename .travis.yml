@@ -1,0 +1,23 @@
+sudo:
+  false
+
+language:
+  python
+
+python:
+  - 2.7
+  - 3.3
+  # - 3.4
+  - 3.5
+  - 3.6
+
+before_install:
+  - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+  - cd $TRAVIS_REPO_SLUG
+  - git checkout master
+
+install:
+  - make install-py
+
+script:
+  - make test-py
