@@ -1,4 +1,5 @@
 .PHONY: all install install-py install-js install-rb test test-py test-js test-rb
+export PATH := ./node_modules/.bin:$(PATH)
 
 all: list
 
@@ -9,7 +10,6 @@ install:
 	make install-py
 	make install-js
 	make install-rb
-	make install-php
 
 install-py:
 	pip install packspec
@@ -30,13 +30,12 @@ test:
 	make test-py
 	make test-js
 	make test-rb
-	make test-php
 
 test-py:
 	packspec-py tests
 
 test-js:
-	node_modules/.bin/packspec-js tests
+	packspec-js tests
 
 test-rb:
 	packspec-rb tests
