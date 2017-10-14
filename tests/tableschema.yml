@@ -448,20 +448,17 @@
 ---
 
 js: |
-  function makeDatetime(year, month, ...args) {
-    return new Date(year, month - 1, ...args)
-  }
-  function makeDate(year, month, ...args) {
-    return new Date(year, month - 1, ...args)
-  }
-  function makeTime(hour, minute, second) {
-    return new Date(0, 0, 0, hour, minute, second)
-  }
   module.exports = {
     makeDuration: require('moment').duration,
-    makeDatetime,
-    makeDate,
-    makeTime,
+    makeDatetime: function(year, month, ...args) {
+      return new Date(year, month - 1, ...args)
+    },
+    makeDate: function(year, month, ...args) {
+      return new Date(year, month - 1, ...args)
+    },
+    makeTime: function(hour, minute, second) {
+      return new Date(0, 0, 0, hour, minute, second)
+    }
   }
 
 py: |
