@@ -2,10 +2,10 @@ sudo:
   false
 
 language:
-  node_js
+  ruby
 
-node_js:
-  - 8
+rvm:
+  - 2.4.0
 
 before_install:
   - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
@@ -13,7 +13,7 @@ before_install:
   - git checkout master
 
 install:
-  - make install-js
+  - make install-rb
 
 script:
-  - make test-js
+  - make test-rb
