@@ -1,0 +1,482 @@
+- tableschema
+
+- tableschema=$import: ['tableschema']
+
+- (py)Table
+
+- table=tableschema.Table: ['data/source.csv', schema=: 'data/schema.json']
+- table.read: [keyed=: true, ==: [{'name': 'John', 'age': 21}]]
+
+- (py|rb)Schema
+
+- schema=tableschema.Schema: ['data/schema.json']
+- schema.fields.0.name==: 'name'
+- schema.fields.0.type==: 'string'
+- schema.fields.1.name==: 'age'
+- schema.fields.1.type==: 'integer'
+- schema.cast_row: [['John', '21'], ==: ['John', 21]]
+
+- Field
+
+- field=tableschema.Field: [{'name': 'name'}]
+- (js|py)field.descriptor.name==: 'name'
+- (js|py)field.descriptor.type==: 'string'
+- (js|py)field.descriptor.format==: 'default'
+- field.name==: 'name'
+- field.type==: 'string'
+- field.format==: 'default'
+- field.constraints==: {}
+- (js|py)field.required==: false
+
+- Field - any
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'any'}]
+- field.type==: 'any'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [1, ==: 1]
+- field.cast_value: ['1', ==: '1']
+- field.cast_value: ['3.14', ==: '3.14']
+- field.cast_value: [True, ==: True]
+
+- Field - array
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'array'}]
+- field.type==: 'array'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [[], ==: []]
+- field.cast_value: ['[]', ==: []]
+- field.cast_value: [['key', 'value'], ==: ['key', 'value']]
+- field.cast_value: [["key", "value"], ==: ['key', 'value']]
+- field.cast_value: [["key", "value"], ==: ['key', 'value']]
+- field.cast_value: ['{"key": "value"}', ==: ERROR]
+- field.cast_value: ['string', ==: ERROR]
+- field.cast_value: [1, ==: ERROR]
+- field.cast_value: ['3.14', ==: ERROR]
+
+- Field - boolean
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'boolean'}]
+- field.type==: 'boolean'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [True, ==: True]
+- field.cast_value: ['true', ==: True]
+- field.cast_value: ['True', ==: True]
+- field.cast_value: ['TRUE', ==: True]
+- field.cast_value: ['1', ==: True]
+- field.cast_value: [False, ==: False]
+- field.cast_value: ['false', ==: False]
+- field.cast_value: ['False', ==: False]
+- field.cast_value: ['FALSE', ==: False]
+- field.cast_value: ['0', ==: False]
+- field.cast_value: ['3.14', ==: ERROR]
+- field.cast_value: ['yes', ==: ERROR]
+- (py)field.cast_value: ['truE', ==: ERROR]
+- (js|py)field.cast_value: [0, ==: ERROR]
+- (js|py)field.cast_value: [1, ==: ERROR]
+
+- Field - date
+
+- date=$make_date: [2019, 01, 01]
+- field=tableschema.Field: [{'name': 'name', 'type': 'date'}]
+- field.type==: 'date'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [{date}, ==: {date}]
+- field.cast_value: ['2019-01-01', ==: {date}]
+- field.cast_value: ['10th Jan 1969', ==: ERROR]
+- field.cast_value: ['invalid', ==: ERROR]
+- field.cast_value: [True, ==: ERROR]
+
+- Field - date/any
+
+- date=$make_date: [2019, 01, 01]
+- field=tableschema.Field: [{'name': 'name', 'type': 'date', 'format': 'any'}]
+- field.type==: 'date'
+- field.format==: 'any'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [{date}, ==: {date}]
+- field.cast_value: ['2019-01-01', ==: {date}]
+- (py|rb)field.cast_value: ['01th Jan 2019', ==: {date}]
+- (py|rb)field.cast_value: ['invalid', ==: ERROR]
+- (py|rb)field.cast_value: [True, ==: ERROR]
+
+- (js|py)Field - date/pattern
+
+- date=$make_date: [2019, 01, 01]
+- field=tableschema.Field: [{'name': 'name', 'type': 'date', 'format': '%d/%m/%y'}]
+- field.type==: 'date'
+- field.format==: '%d/%m/%y'
+- field.cast_value: ['', ==: null]
+- field.cast_value: ['01/01/19', ==: {date}]
+- field.cast_value: ['10th Jan 1969', ==: ERROR]
+- field.cast_value: ['invalid', ==: ERROR]
+- field.cast_value: [True, ==: ERROR]
+
+- Field - date/invalid
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'date', 'format': 'invalid'}]
+- field.type==: 'date'
+- field.format==: 'invalid'
+- field.cast_value: ['', ==: null]
+- field.cast_value: ['2019-01-01', ==: ERROR]
+
+- Field - datetime
+
+- datetime=$make_datetime: [2014, 01, 01, 06, 0, 0]
+- field=tableschema.Field: [{'name': 'name', 'type': 'datetime'}]
+- field.type==: 'datetime'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [{datetime}, ==: {datetime}]
+- field.cast_value: ['2014-01-01T06:00:00Z', ==: {datetime}]
+- field.cast_value: ['10th Jan 1969', ==: ERROR]
+- field.cast_value: ['invalid', ==: ERROR]
+- field.cast_value: [True, ==: ERROR]
+
+- Field - datetime/any
+
+- datetime=$make_datetime: [2014, 01, 01, 06, 0, 0]
+- field=tableschema.Field: [{'name': 'name', 'type': 'datetime', 'format': 'any'}]
+- field.type==: 'datetime'
+- field.format==: 'any'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [{datetime}, ==: {datetime}]
+- field.cast_value: ['2014-01-01T06:00:00', ==: {datetime}]
+- (py|rb)field.cast_value: ['1st Jan 2014 6 am', ==: {datetime}]
+- (py|rb)field.cast_value: ['invalid', ==: ERROR]
+- (py|rb)field.cast_value: [True, ==: ERROR]
+
+- (js|py)Field - datetime/pattern
+
+- datetime=$make_datetime: [2014, 01, 01, 06, 0, 0]
+- field=tableschema.Field: [{'name': 'name', 'type': 'datetime', 'format': '%d/%m/%y %H:%M'}]
+- field.type==: 'datetime'
+- field.format==: '%d/%m/%y %H:%M'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [{datetime}, ==: {datetime}]
+- field.cast_value: ['01/01/14 06:00', ==: {datetime}]
+- field.cast_value: ['invalid', ==: ERROR]
+- field.cast_value: [True, ==: ERROR]
+
+- Field - datetime/invalid
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'datetime', 'format': 'invalid'}]
+- field.type==: 'datetime'
+- field.format==: 'invalid'
+- field.cast_value: ['', ==: null]
+- field.cast_value: ['2014-01-01T06:00:00Z', ==: ERROR]
+
+- (js|py)Field - duration
+
+- year=$make_duration: [years=: 1]
+- month=$make_duration: [months=: 1]
+- custom=$make_duration: [years=: 1, months=: 10, days=: 3, hours=: 5, minutes=: 11, seconds=: 7]
+- field=tableschema.Field: [{'name': 'name', 'type': 'duration'}]
+- field.type==: 'duration'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [{custom}, ==: {custom}]
+- field.cast_value: ['P1Y10M3DT5H11M7S', ==: {custom}]
+- field.cast_value: ['P1Y', ==: {year}]
+- field.cast_value: ['P1M', ==: {month}]
+- field.cast_value: ['P1M1Y', ==: ERROR]
+- (py)field.cast_value: ['P-1Y', ==: ERROR]
+- field.cast_value: ['year', ==: ERROR]
+- field.cast_value: [True, ==: ERROR]
+- field.cast_value: [False, ==: ERROR]
+- field.cast_value: [1, ==: ERROR]
+
+- Field - geojson
+
+- geojson=: {'properties': {'Ã': 'Ã'}, 'type': 'Feature', 'geometry': None}
+- field=tableschema.Field: [{'name': 'name', 'type': 'geojson'}]
+- field.type==: 'geojson'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- (skip)field.cast_value: [{geojson}, ==: {geojson}]
+- field.cast_value: [{'coordinates': [0, 0, 0], 'type': 'Point'}, ==: ERROR]
+- field.cast_value: ['string', ==: ERROR]
+- field.cast_value: [1, ==: ERROR]
+- field.cast_value: [{}, ==: ERROR]
+- field.cast_value: ['{}', ==: ERROR]
+
+- (js|py)Field - geojson
+
+- topojson=: {'type': 'LineString', 'arcs': [42]}
+- field=tableschema.Field: [{'name': 'name', 'type': 'geojson', 'format': 'topojson'}]
+- field.type==: 'geojson'
+- field.format==: 'topojson'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [{topojson}, ==: {topojson}]
+- field.cast_value: ['{"type": "LineString", "arcs": [42]}', ==: {topojson}]
+- field.cast_value: ['string', ==: ERROR]
+- field.cast_value: [1, ==: ERROR]
+
+- (js|py)Field - geopoint
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'geopoint'}]
+- field.type==: 'geopoint'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [[180, 90], ==: [180, 90]]
+- field.cast_value: ['180,90', ==: [180, 90]]
+- field.cast_value: ['180,-90', ==: [180, -90]]
+- field.cast_value: [{'lon': 180, 'lat': 90}, ==: ERROR]
+- field.cast_value: ['181,90', ==: ERROR]
+- field.cast_value: ['0,91', ==: ERROR]
+- field.cast_value: ['string', ==: ERROR]
+- field.cast_value: [1, ==: ERROR]
+- field.cast_value: ['3.14', ==: ERROR]
+
+- (js|py)Field - geopoint/array
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'geopoint', 'format': 'array'}]
+- field.type==: 'geopoint'
+- field.format==: 'array'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [[180, 90], ==: [180, 90]]
+- field.cast_value: ['[180, -90]', ==: [180, -90]]
+- field.cast_value: [{'lon': 180, 'lat': 90}, ==: ERROR]
+- field.cast_value: ['181,90', ==: ERROR]
+- field.cast_value: ['0,91', ==: ERROR]
+- field.cast_value: ['string', ==: ERROR]
+- field.cast_value: [1, ==: ERROR]
+- field.cast_value: ['3.14', ==: ERROR]
+
+- (js|py)Field - geopoint/object
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'geopoint', 'format': 'object'}]
+- field.type==: 'geopoint'
+- field.format==: 'object'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [{'lon': 180, 'lat': 90}, ==: [180, 90]]
+- field.cast_value: ['{"lon": 180, "lat": 90}', ==: [180, 90]]
+- field.cast_value: [[180, -90], ==: ERROR]
+- field.cast_value: ['[180, -90]', ==: ERROR]
+- field.cast_value: [{'lon': 181, 'lat': 90}, ==: ERROR]
+- field.cast_value: [{'lon': 180, 'lat': -91}, ==: ERROR]
+- field.cast_value: ['string', ==: ERROR]
+- field.cast_value: [1, ==: ERROR]
+- field.cast_value: ['3.14', ==: ERROR]
+
+- Field - integer
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'integer'}]
+- field.type==: 'integer'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [1, ==: 1]
+- field.cast_value: ['1', ==: 1]
+- field.cast_value: ['3.14', ==: ERROR]
+
+- Field - number
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'number'}]
+- field.type==: 'number'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [1, ==: 1]
+- field.cast_value: ['1', ==: 1]
+- field.cast_value: [10.5, ==: 10.5]
+- field.cast_value: ['10.5', ==: 10.5]
+- field.cast_value: ['invalid', ==: ERROR]
+
+- Field - number groupChar
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'number', 'groupChar': ','}]
+- field.type==: 'number'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: ['1,000', ==: 1000]
+- field.cast_value: ['1,000.00', ==: 1000]
+- field.cast_value: ['invalid', ==: ERROR]
+
+- Field - number decimalChar
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'number', 'decimalChar': '#'}]
+- field.type==: 'number'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: ['10#00', ==: 10]
+- field.cast_value: ['10#50', ==: 10.5]
+- field.cast_value: ['invalid', ==: ERROR]
+
+- Field - object
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'object'}]
+- field.type==: 'object'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [{}, ==: {}]
+- field.cast_value: ['{}', ==: {}]
+- field.cast_value: [{'key': 'value'}, ==: {'key': 'value'}]
+- (js|py)field.cast_value: ['{"key": "value"}', ==: {'key': 'value'}]
+- field.cast_value: ['["key", "value"]', ==: ERROR]
+- field.cast_value: ['string', ==: ERROR]
+- field.cast_value: [1, ==: ERROR]
+- field.cast_value: ['3.14', ==: ERROR]
+
+- Field - string
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'string'}]
+- field.type==: 'string'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: ['string', ==: 'string']
+- field.cast_value: [0, ==: ERROR]
+
+- Field - string/uri
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'string', 'format': 'uri'}]
+- field.type==: 'string'
+- field.format==: 'uri'
+- (js|py)field.cast_value: ['', ==: null]
+- field.cast_value: ['http://google.com', ==: 'http://google.com']
+- field.cast_value: ['string', ==: ERROR]
+- field.cast_value: [0, ==: ERROR]
+
+- Field - string/email
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'string', 'format': 'email'}]
+- field.type==: 'string'
+- field.format==: 'email'
+- (js|py)field.cast_value: ['', ==: null]
+- field.cast_value: ['name@gmail.com', ==: 'name@gmail.com']
+- field.cast_value: ['http://google.com', ==: ERROR]
+- field.cast_value: ['string', ==: ERROR]
+- field.cast_value: [0, ==: ERROR]
+
+- (js|py)Field - string/binary
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'string', 'format': 'binary'}]
+- field.type==: 'string'
+- field.format==: 'binary'
+- field.cast_value: ['', ==: null]
+- field.cast_value: ['dGVzdA==', ==: 'dGVzdA==']
+- (py)field.cast_value: ['string', ==: ERROR]
+- field.cast_value: [0, ==: ERROR]
+
+- (js|py)Field - time
+
+- time=$make_time: [6, 0, 0]
+- field=tableschema.Field: [{'name': 'name', 'type': 'time'}]
+- field.type==: 'time'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [{time}, ==: {time}]
+- (py)field.cast_value: ['06:00:00', ==: {time}]
+- field.cast_value: ['09:00', ==: ERROR]
+- field.cast_value: ['3 am', ==: ERROR]
+- field.cast_value: ['3.00', ==: ERROR]
+- field.cast_value: ['invalid', ==: ERROR]
+
+- (js|py)Field - time/any
+
+- time=$make_time: [6, 0, 0]
+- field=tableschema.Field: [{'name': 'name', 'type': 'time', 'format': 'any'}]
+- field.type==: 'time'
+- field.format==: 'any'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [{time}, ==: {time}]
+- (py)field.cast_value: ['06:00:00', ==: {time}]
+- (py)field.cast_value: ['06:00', ==: {time}]
+- (py)field.cast_value: ['6 am', ==: {time}]
+- (py)field.cast_value: ['some time', ==: ERROR]
+- (py)field.cast_value: ['invalid', ==: ERROR]
+- (py)field.cast_value: [True, ==: ERROR]
+
+- (js|py)Field - time/pattern
+
+- time=$make_time: [6, 0, 0]
+- field=tableschema.Field: [{'name': 'name', 'type': 'time', 'format': '%H:%M'}]
+- field.type==: 'time'
+- field.format==: '%H:%M'
+- field.cast_value: ['', ==: null]
+- (py)field.cast_value: ['06:00', ==: {time}]
+- field.cast_value: ['06:00:00', ==: ERROR]
+- field.cast_value: ['3 am', ==: ERROR]
+- field.cast_value: ['some time', ==: ERROR]
+- field.cast_value: ['invalid', ==: ERROR]
+- field.cast_value: [True, ==: ERROR]
+
+- (js|py)Field - time/invalid
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'time', 'format': 'invalid'}]
+- field.type==: 'time'
+- field.format==: 'invalid'
+- field.cast_value: ['', ==: null]
+- field.cast_value: ['06:00:00', ==: ERROR]
+
+- (js|py)Field - year
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'year'}]
+- field.type==: 'year'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [2000, ==: 2000]
+- field.cast_value: ['2000', ==: 2000]
+- field.cast_value: [-2000, ==: ERROR]
+- field.cast_value: [20000, ==: ERROR]
+- field.cast_value: ['3.14', ==: ERROR]
+
+- (js|py)Field - yearmonth
+
+- field=tableschema.Field: [{'name': 'name', 'type': 'yearmonth'}]
+- field.name==: 'name'
+- field.type==: 'yearmonth'
+- field.format==: 'default'
+- field.cast_value: ['', ==: null]
+- field.cast_value: [[2000, 10], ==: [2000, 10]]
+- field.cast_value: ['2000-10', ==: [2000, 10]]
+- field.cast_value: [[2000, 10, 20], ==: ERROR]
+- field.cast_value: ['2000-13-20', ==: ERROR]
+- field.cast_value: ['2000-13', ==: ERROR]
+- field.cast_value: ['2000-0', ==: ERROR]
+- field.cast_value: ['13', ==: ERROR]
+- field.cast_value: [-10, ==: ERROR]
+- field.cast_value: [20, ==: ERROR]
+- field.cast_value: ['3.14', ==: ERROR]
+
+- (py)validate
+
+- tableschema.validate: [{}, ==: ERROR]
+- tableschema.validate: [{'fields': [{'name': 'name'}]}, ==: true]
+
+---
+
+js: |
+  const moment = require('moment')
+  makeDuration = moment.duration
+  makeDatetime = (year, month, ...args) => {
+    return new Date(year, month - 1, ...args)
+  }
+  makeDate = (year, month, ...args) => {
+    return new Date(year, month - 1, ...args)
+  }
+  makeTime = (hour, minute, second) => {
+    return new Date(0, 0, 0, hour, minute, second)
+  }
+
+py: |
+  import datetime
+  from isodate import Duration
+  make_datetime = datetime.datetime
+  make_date = datetime.date
+  make_time = datetime.time
+  make_duration = Duration
+
+rb: |
+  class Functions
+    def make_datetime(year, month, day, hour, minute, second)
+      return DateTime.new(year, month, day, hour, minute, second)
+    end
+    def make_date(year, month, day)
+      return Date.new(year, month, day)
+    end
+    def make_time(hour, minute, second)
+      return DateTime.new(0, 0, 0, hour, minute, second)
+    end
+  end
