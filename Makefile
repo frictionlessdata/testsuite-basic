@@ -1,5 +1,4 @@
 .PHONY: all install install-py install-js install-rb test test-py test-js test-rb
-export PATH := .:$(PATH)
 
 all: list
 
