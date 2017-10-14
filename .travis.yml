@@ -2,14 +2,10 @@ sudo:
   false
 
 language:
-  python
+  node_js
 
-python:
-  - 2.7
-  - 3.3
-  # - 3.4
-  - 3.5
-  - 3.6
+node_js:
+  - 8
 
 before_install:
   - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
@@ -17,7 +13,7 @@ before_install:
   - git checkout master
 
 install:
-  - make install-py
+  - make install-js
 
 script:
-  - make test-py
+  - make test-js
