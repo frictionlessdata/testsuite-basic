@@ -1,8 +1,8 @@
 # packspec-frictionless-data
 
-[![Python](https://img.shields.io/travis/packspec/packspec-frictionless-data/python.svg?label=Python)](https://travis-ci.org/packspec/packspec-frictionless-data)
-[![JavaScript](https://img.shields.io/travis/packspec/packspec-frictionless-data/javascript.svg?label=JavaScript)](https://travis-ci.org/packspec/packspec-frictionless-data)
-[![Ruby](https://img.shields.io/travis/packspec/packspec-frictionless-data/ruby.svg?label=Ruby)](https://travis-ci.org/packspec/packspec-frictionless-data)
+[![Python](https://img.shields.io/travis/frictionlessdata/testsuite-basic/python.svg?label=Python)](https://travis-ci.org/frictionlessdata/testsuite-basic)
+[![JavaScript](https://img.shields.io/travis/frictionlessdata/testsuite-basic/javascript.svg?label=JavaScript)](https://travis-ci.org/frictionlessdata/testsuite-basic)
+[![Ruby](https://img.shields.io/travis/frictionlessdata/testsuite-basic/ruby.svg?label=Ruby)](https://travis-ci.org/frictionlessdata/testsuite-basic)
 
 Testsuite for basic Frictionless Data Implementations.
 
