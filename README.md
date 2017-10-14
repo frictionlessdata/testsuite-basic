@@ -1,4 +1,4 @@
-# packspec-frictionless-data
+# testsuite-basic
 
 [![Python](https://img.shields.io/travis/frictionlessdata/testsuite-basic/python.svg?label=Python)](https://travis-ci.org/frictionlessdata/testsuite-basic)
 [![JavaScript](https://img.shields.io/travis/frictionlessdata/testsuite-basic/javascript.svg?label=JavaScript)](https://travis-ci.org/frictionlessdata/testsuite-basic)
