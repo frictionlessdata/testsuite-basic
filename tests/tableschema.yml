@@ -448,16 +448,20 @@
 ---
 
 js: |
-  const moment = require('moment')
-  makeDuration = moment.duration
-  makeDatetime = (year, month, ...args) => {
+  function makeDatetime(year, month, ...args) {
     return new Date(year, month - 1, ...args)
   }
-  makeDate = (year, month, ...args) => {
+  function makeDate(year, month, ...args) {
     return new Date(year, month - 1, ...args)
   }
-  makeTime = (hour, minute, second) => {
+  function makeTime(hour, minute, second) {
     return new Date(0, 0, 0, hour, minute, second)
+  }
+  module.exports = {
+    makeDuration: require('moment').duration,
+    makeDatetime,
+    makeDate,
+    makeTime,
   }
 
 py: |
@@ -469,14 +473,12 @@ py: |
   make_duration = Duration
 
 rb: |
-  class Functions
-    def make_datetime(year, month, day, hour, minute, second)
-      return DateTime.new(year, month, day, hour, minute, second)
-    end
-    def make_date(year, month, day)
-      return Date.new(year, month, day)
-    end
-    def make_time(hour, minute, second)
-      return DateTime.new(0, 0, 0, hour, minute, second)
-    end
+  def make_datetime(year, month, day, hour, minute, second)
+    return DateTime.new(year, month, day, hour, minute, second)
+  end
+  def make_date(year, month, day)
+    return Date.new(year, month, day)
+  end
+  def make_time(hour, minute, second)
+    return DateTime.new(0, 0, 0, hour, minute, second)
   end
