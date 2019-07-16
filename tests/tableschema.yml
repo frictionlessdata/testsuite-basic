@@ -169,7 +169,7 @@
 - field.cast_value: ['', ==: null]
 - field.cast_value: ['2014-01-01T06:00:00Z', ==: ERROR]
 
-- (js|py)Field - duration
+- (py)Field - duration
 
 - year=$make_duration: [years=: 1]
 - month=$make_duration: [months=: 1]

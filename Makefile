@@ -35,7 +35,7 @@ test-py:
 	packspec-py tests
 
 test-js:
-	packspec-js tests
+	npx packspec-js tests
 
 test-rb:
 	packspec-rb tests
