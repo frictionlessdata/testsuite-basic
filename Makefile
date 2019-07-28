@@ -26,6 +26,11 @@ install-rb:
 	gem install tableschema
 	gem install datapackage
 
+readme:
+	pip install md-toc
+	md_toc -p README.md github --header-levels 3
+	sed -i '/(#testsuite-basic)/,+1d' README.md
+
 test:
 	make test-py
 	make test-js

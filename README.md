@@ -6,6 +6,17 @@
 
 Testsuite for basic Frictionless Data Implementations.
 
+## Contents
+
+<!--TOC-->
+
+  - [Contributing](#contributing)
+    - [Python](#python)
+    - [JavaScript](#javascript)
+    - [Ruby](#ruby)
+
+<!--TOC-->
+
 ## Contributing
 
 ### Python
@@ -20,7 +31,7 @@ make install-py
 make test-py
 ```
 
-## JavaScript
+### JavaScript
 
 Requirements:
 - installed `nvm` - https://github.com/creationix/nvm#installation
@@ -32,7 +43,7 @@ make install-js
 make test-js
 ```
 
-## Ruby
+### Ruby
 
 Requirements:
 - installed `rvm` - https://rvm.io/rvm/install
