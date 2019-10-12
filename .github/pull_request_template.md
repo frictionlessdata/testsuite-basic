@@ -4,4 +4,4 @@ Please replace this line with full information about your pull request. Please m
 
 ---
 
-Please preserve this line to notify the maintainer: @roll
+Please preserve this line to notify @roll (maintainer of the project)
