@@ -1,6 +1,10 @@
 .PHONY: all install install-py install-js install-rb test test-py test-js test-rb
 export PATH := ./node_modules/.bin:$(PATH)
 
+
+MAINTAINER := $(shell head -n 1 MAINTAINER.md)
+
+
 all: list
 
 list:
@@ -30,6 +34,10 @@ readme:
 	pip install md-toc
 	md_toc -p README.md github --header-levels 3
 	sed -i '/(#testsuite-basic)/,+1d' README.md
+
+templates:
+	sed -i -E "s/@(\w*)/@$(MAINTAINER)/" .github/issue_template.md
+	sed -i -E "s/@(\w*)/@$(MAINTAINER)/" .github/pull_request_template.md
 
 test:
 	make test-py
