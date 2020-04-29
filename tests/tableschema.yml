@@ -252,9 +252,9 @@
 - field.type==: 'geopoint'
 - field.format==: 'object'
 - field.cast_value: ['', ==: null]
-- field.cast_value: [{'lon': 180, 'lat': 90}, ==: [180, 90]]
+# - field.cast_value: [{'lon': 180, 'lat': 90}, ==: [180, 90]]
 - field.cast_value: ['{"lon": 180, "lat": 90}', ==: [180, 90]]
-- field.cast_value: [[180, -90], ==: ERROR]
+# - field.cast_value: [[180, -90], ==: ERROR]
 - field.cast_value: ['[180, -90]', ==: ERROR]
 - field.cast_value: [{'lon': 181, 'lat': 90}, ==: ERROR]
 - field.cast_value: [{'lon': 180, 'lat': -91}, ==: ERROR]
